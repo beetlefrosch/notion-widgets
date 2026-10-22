@@ -42,7 +42,30 @@ GETTEX passt zum Bild des alten Widgets und zeigt zwei Nachkommastellen, Tradega
 - Uhr: Datum auf Deutsch („Donnerstag | 22. Oktober 2026“), das Original war englisch.
 - Wetter: zusätzlich Höchst- und Tiefstwert je Tag.
 
-## In Notion einbinden
+## Hosting und Einbindung
 
-Notion bettet nur Seiten ein, die öffentlich per HTTPS erreichbar sind. Lokale Dateien gehen nicht.
-Stand 22.10.2026: noch nicht gehostet.
+Gehostet über GitHub Pages im öffentlichen Repo https://github.com/beetlefrosch/notion-widgets
+(seit 22.10.2026). Notion bettet nur öffentliche HTTPS-Seiten ein, darum öffentlich. Im Repo liegen nur
+die drei HTML-Dateien und diese README, keine Daten oder Schlüssel. Commits laufen über die
+noreply-Adresse von GitHub, nicht über die private Mailadresse.
+
+Adressen (so in „Mein HQ“ eingebettet):
+- https://beetlefrosch.github.io/notion-widgets/wetter.html
+- https://beetlefrosch.github.io/notion-widgets/uhr.html
+- https://beetlefrosch.github.io/notion-widgets/kurs.html?symbol=GETTEX:ALV
+- https://beetlefrosch.github.io/notion-widgets/kurs.html?symbol=BITSTAMP:BTCEUR
+
+## Änderungen hochladen
+
+Dateien hier im Ordner bearbeiten, dann:
+
+```
+./deploy.sh "Was geändert wurde"
+```
+
+Das Skript klont das Repo in einen temporären Ordner, kopiert die Dateien hinein und pusht. Nach etwa
+einer Minute ist die Änderung live. Voraussetzung ist die GitHub-CLI (`gh`, über Homebrew), angemeldet als
+beetlefrosch; die Anmeldung liegt unter `~/.config/gh` (von Oliver am 22.10.2026 freigegeben).
+
+`~/.gitconfig` enthält eine Regel, die GitHub-HTTPS-Adressen auf SSH umbiegt. Auf diesem Mac gibt es keinen
+SSH-Schlüssel, deshalb blendet `deploy.sh` die globale Git-Konfiguration aus und meldet sich über `gh` an.
