@@ -30,11 +30,13 @@
     gap: 10px;
     padding: 12px;
   }
-  .clock { display: flex; align-items: center; gap: 6px; }
+  /* Ziffern wachsen mit dem Embed: begrenzt durch Breite (zwei Karten + Doppelpunkt) und Höhe */
+  :root { --s: clamp(60px, min(40vw, 50vh), 220px); }
+  .clock { display: flex; align-items: center; gap: calc(var(--s) * .08); }
   .card {
     position: relative;
-    width: 72px;
-    height: 68px;
+    width: var(--s);
+    height: calc(var(--s) * .94);
     border-radius: 6px;
     background: var(--card);
     box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
@@ -42,7 +44,7 @@
     align-items: center;
     justify-content: center;
     font-family: Impact, "Arial Narrow Bold", "Helvetica Neue", sans-serif;
-    font-size: 54px;
+    font-size: calc(var(--s) * .76);
     color: var(--digit);
     perspective: 200px;
     overflow: hidden;
@@ -62,8 +64,8 @@
     50%  { transform: rotateX(90deg); }
     100% { transform: rotateX(0); }
   }
-  .colon { font-size: 34px; font-weight: 700; color: var(--digit); }
-  .date { font-size: 14px; font-weight: 600; text-align: center; }
+  .colon { font-size: calc(var(--s) * .47); font-weight: 700; color: var(--digit); }
+  .date { font-size: clamp(12px, 6.2vw, 22px); font-weight: 600; text-align: center; }
 </style>
 </head>
 <body>
