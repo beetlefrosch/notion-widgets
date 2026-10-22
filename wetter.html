@@ -14,6 +14,16 @@
     --sun: #f5a623;
     --rain: #4a90d9;
   }
+  /* Dunkel: automatisch nach System, oder fest per ?theme=dark (Farben wie Notions Dunkelmodus) */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #191919;
+      --text: #e6e6e4;
+      --muted: #9b9b98;
+      --day-bg: #252525;
+      --icon: #a5a5a2;
+    }
+  }
   :root[data-theme="dark"] {
     --bg: #191919;
     --text: #e6e6e4;
@@ -64,12 +74,12 @@
 <div class="days" id="days"></div>
 
 <script>
-// Parameter: ?name=Lichtenstein/Sa.&lat=50.757&lon=12.631&theme=dark
+// Parameter: ?name=Lichtenstein/Sa.&lat=50.757&lon=12.631&theme=light|dark (ohne: automatisch)
 const p = new URLSearchParams(location.search);
 const NAME = p.get("name") || "Lichtenstein/Sa.";
 const LAT = p.get("lat") || "50.757";
 const LON = p.get("lon") || "12.631";
-if (p.get("theme") === "dark") document.documentElement.dataset.theme = "dark";
+if (["light", "dark"].includes(p.get("theme"))) document.documentElement.dataset.theme = p.get("theme");
 document.getElementById("name").textContent = NAME;
 
 // WMO-Wettercodes (Open-Meteo) -> Text und Symbol

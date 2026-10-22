@@ -11,6 +11,15 @@
     --digit: #222222;
     --text: #1f1f1f;
   }
+  /* Dunkel: automatisch nach System, oder fest per ?theme=dark */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1f2a30;
+      --card: #2b3a42;
+      --digit: #f0f0f0;
+      --text: #e6e6e4;
+    }
+  }
   :root[data-theme="dark"] {
     --bg: #1f2a30;
     --card: #2b3a42;
@@ -77,9 +86,9 @@
 <div class="date" id="date"></div>
 
 <script>
-// Parameter: ?theme=dark  ?bg=%23ffffff (eigene Hintergrundfarbe)
+// Parameter: ?theme=light|dark (ohne: automatisch)  ?bg=%23ffffff (eigene Hintergrundfarbe)
 const p = new URLSearchParams(location.search);
-if (p.get("theme") === "dark") document.documentElement.dataset.theme = "dark";
+if (["light", "dark"].includes(p.get("theme"))) document.documentElement.dataset.theme = p.get("theme");
 if (p.get("bg")) document.documentElement.style.setProperty("--bg", p.get("bg"));
 
 const WEEKDAY = new Intl.DateTimeFormat("de-DE", { weekday: "long" });

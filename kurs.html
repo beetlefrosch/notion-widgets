@@ -11,33 +11,42 @@
 </style>
 </head>
 <body>
-<div class="tradingview-widget-container">
-  <div class="tradingview-widget-container__widget"></div>
-</div>
+<div class="tradingview-widget-container"></div>
 
 <script>
 // Offizielles TradingView-Widget "Mini Symbol Overview", ohne Zwischenanbieter.
-// Parameter: ?symbol=GETTEX:ALV  ?range=1D|1M|12M  ?theme=dark
+// Parameter: ?symbol=GETTEX:ALV  ?range=1D|1M|12M  ?theme=light|dark (ohne: automatisch)
 // XETR:ALV liefert im kostenlosen Widget nur den Kurs, keinen Tageschart; GETTEX schon.
 const p = new URLSearchParams(location.search);
-const theme = p.get("theme") === "dark" ? "dark" : "light";
-document.body.dataset.theme = theme;
+const fixed = ["light", "dark"].includes(p.get("theme")) ? p.get("theme") : null;
+const dark = matchMedia("(prefers-color-scheme: dark)");
 
-const s = document.createElement("script");
-s.src = "https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js";
-s.async = true;
-s.textContent = JSON.stringify({
-  symbol: p.get("symbol") || "GETTEX:ALV",
-  width: "100%",
-  height: "100%",
-  locale: "de_DE",
-  dateRange: p.get("range") || "1D",
-  colorTheme: theme,
-  isTransparent: false,
-  autosize: true,
-  largeChartUrl: "",
-});
-document.querySelector(".tradingview-widget-container").appendChild(s);
+// TradingView legt die Farbe beim Laden fest, darum bei jedem Wechsel neu aufbauen.
+function render() {
+  const theme = fixed || (dark.matches ? "dark" : "light");
+  document.body.dataset.theme = theme;
+
+  const box = document.querySelector(".tradingview-widget-container");
+  box.innerHTML = '<div class="tradingview-widget-container__widget"></div>';
+  const s = document.createElement("script");
+  s.src = "https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js";
+  s.async = true;
+  s.textContent = JSON.stringify({
+    symbol: p.get("symbol") || "GETTEX:ALV",
+    width: "100%",
+    height: "100%",
+    locale: "de_DE",
+    dateRange: p.get("range") || "1D",
+    colorTheme: theme,
+    isTransparent: false,
+    autosize: true,
+    largeChartUrl: "",
+  });
+  box.appendChild(s);
+}
+
+render();
+if (!fixed) dark.addEventListener("change", render);
 </script>
 </body>
 </html>
