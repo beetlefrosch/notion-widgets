@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uhr</title>
+<style>
+  :root {
+    --bg: #d3e5ef;
+    --card: #dde9f0;
+    --digit: #222222;
+    --text: #1f1f1f;
+  }
+  :root[data-theme="dark"] {
+    --bg: #1f2a30;
+    --card: #2b3a42;
+    --digit: #f0f0f0;
+    --text: #e6e6e4;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+  }
+  .clock { display: flex; align-items: center; gap: 6px; }
+  .card {
+    position: relative;
+    width: 72px;
+    height: 68px;
+    border-radius: 6px;
+    background: var(--card);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Impact, "Arial Narrow Bold", "Helvetica Neue", sans-serif;
+    font-size: 54px;
+    color: var(--digit);
+    perspective: 200px;
+    overflow: hidden;
+  }
+  /* Trennlinie in der Mitte wie bei einer Klappzahl-Uhr */
+  .card::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 50%;
+    height: 1px;
+    background: rgba(0, 0, 0, .18);
+  }
+  .card span { display: inline-block; }
+  .card.flip span { animation: flip .45s ease-in-out; }
+  @keyframes flip {
+    0%   { transform: rotateX(0); }
+    50%  { transform: rotateX(90deg); }
+    100% { transform: rotateX(0); }
+  }
+  .colon { font-size: 34px; font-weight: 700; color: var(--digit); }
+  .date { font-size: 14px; font-weight: 600; text-align: center; }
+</style>
+</head>
+<body>
+<div class="clock">
+  <div class="card" id="h"><span>--</span></div>
+  <div class="colon">:</div>
+  <div class="card" id="m"><span>--</span></div>
+</div>
+<div class="date" id="date"></div>
+
+<script>
+// Parameter: ?theme=dark  ?bg=%23ffffff (eigene Hintergrundfarbe)
+const p = new URLSearchParams(location.search);
+if (p.get("theme") === "dark") document.documentElement.dataset.theme = "dark";
+if (p.get("bg")) document.documentElement.style.setProperty("--bg", p.get("bg"));
+
+const WEEKDAY = new Intl.DateTimeFormat("de-DE", { weekday: "long" });
+const DATE = new Intl.DateTimeFormat("de-DE", { day: "numeric", month: "long", year: "numeric" });
+
+function set(id, value) {
+  const card = document.getElementById(id);
+  const span = card.querySelector("span");
+  if (span.textContent === value) return;
+  span.textContent = value;
+  card.classList.remove("flip");
+  void card.offsetWidth; // Animation neu starten
+  card.classList.add("flip");
+}
+
+function tick() {
+  const now = new Date();
+  set("h", String(now.getHours()).padStart(2, "0"));
+  set("m", String(now.getMinutes()).padStart(2, "0"));
+  document.getElementById("date").textContent = `${WEEKDAY.format(now)} | ${DATE.format(now)}`;
+}
+
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>

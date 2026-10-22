@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kurs</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #ffffff; }
+  body[data-theme="dark"] { background: #191919; }
+  .tradingview-widget-container { height: 100%; }
+</style>
+</head>
+<body>
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+</div>
+
+<script>
+// Offizielles TradingView-Widget "Mini Symbol Overview", ohne Zwischenanbieter.
+// Parameter: ?symbol=GETTEX:ALV  ?range=1D|1M|12M  ?theme=dark
+// XETR:ALV liefert im kostenlosen Widget nur den Kurs, keinen Tageschart; GETTEX schon.
+const p = new URLSearchParams(location.search);
+const theme = p.get("theme") === "dark" ? "dark" : "light";
+document.body.dataset.theme = theme;
+
+const s = document.createElement("script");
+s.src = "https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js";
+s.async = true;
+s.textContent = JSON.stringify({
+  symbol: p.get("symbol") || "GETTEX:ALV",
+  width: "100%",
+  height: "100%",
+  locale: "de_DE",
+  dateRange: p.get("range") || "1D",
+  colorTheme: theme,
+  isTransparent: false,
+  autosize: true,
+  largeChartUrl: "",
+});
+document.querySelector(".tradingview-widget-container").appendChild(s);
+</script>
+</body>
+</html>
