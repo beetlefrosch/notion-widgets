@@ -16,16 +16,16 @@ am 22.10.2026 „You've reached free usage limit“. Die Nachbauten brauchen kei
 **wetter.html**
 - `name` – angezeigter Ort, Standard `Lichtenstein/Sa.`
 - `lat`, `lon` – Koordinaten, Standard 50.757 / 12.631 (Lichtenstein/Sachsen)
-- `theme=dark` – dunkle Darstellung
+- `theme=light` oder `theme=dark` – Design fest einstellen (ohne: automatisch, siehe unten)
 
 **uhr.html**
 - `bg` – Hintergrundfarbe, z. B. `?bg=%23ffffff` (`%23` steht für `#`)
-- `theme=dark`
+- `theme=light` oder `theme=dark`
 
 **kurs.html**
 - `symbol` – TradingView-Symbol, Standard `GETTEX:ALV` (Allianz)
 - `range` – Zeitraum: `1D` (Standard), `1M`, `3M`, `12M`, `60M`, `ALL`
-- `theme=dark`
+- `theme=light` oder `theme=dark`
 
 Die zwei Kurs-Widgets aus dem Original:
 - Allianz: `kurs.html?symbol=GETTEX:ALV`
@@ -36,6 +36,17 @@ Die zwei Kurs-Widgets aus dem Original:
 Getestet am 22.10.2026: Mit `XETR:ALV` zeigt das kostenlose TradingView-Widget nur den Kurs, der Chart bleibt
 leer („Bisher noch keine Daten“). `GETTEX:ALV` und `TRADEGATE:ALV` liefern Kurs und Tageschart (12–21 Uhr).
 GETTEX passt zum Bild des alten Widgets und zeigt zwei Nachkommastellen, Tradegate drei.
+
+## Hell und dunkel
+
+Ohne `theme`-Parameter schalten alle Widgets automatisch um (CSS `prefers-color-scheme`). Das Kurs-Widget
+baut sich dabei neu auf, weil TradingView die Farbe beim Laden festlegt.
+
+In Notion richten sich die Widgets nach **Notions** Design, nicht direkt nach dem Mac: Notion gibt den
+Embeds `color-scheme: light` bzw. `dark` mit, und Chrome leitet das an die eingebettete Seite weiter.
+Am 22.10.2026 geprüft: Mac hell, Notion kurz auf „Dunkel“ gestellt, Widgets wurden dunkel. Da Notion auf
+„Systemeinstellung verwenden“ steht und der Mac auf „Automatisch“, folgen die Widgets damit indirekt dem Mac.
+Wer Notion fest auf Hell stellt, bekommt auch abends helle Widgets.
 
 ## Unterschiede zum Original
 
